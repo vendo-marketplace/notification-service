@@ -2,7 +2,6 @@ package com.vendo.notification_service.service;
 
 import com.vendo.notification_service.common.MailSender;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
