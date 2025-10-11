@@ -1,0 +1,45 @@
+spring:
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:vendo.marketplace.real@gmail.com}
+    password: ${MAIL_PASSWORD:qivlskruhrwqizxy}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  data:
+    redis:
+      port: ${REDIS_PORT:6379}
+      host: ${REDIS_HOST:localhost}
+    mongodb:
+      uri: mongodb://${MONGO_USERNAME:root}:${MONGO_PASSWORD:secret}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DATABASE:mydatabase}?authSource=admin&authMechanism=SCRAM-SHA-256
+      authentication-database: admin
+
+eureka:
+  client:
+    enabled: false
+
+redis:
+  reset-password:
+    prefixes:
+      email-prefix: "test-email-prefix:"
+      token-prefix: "test-token-prefix:"
+    ttl: 600
+
+kafka:
+  port: ${KAFKA_PORT:9092}
+  host: ${KAFKA_HOST:localhost}
+  events:
+    password-recovery-email-notification-event:
+      topic: "PASSWORD_RECOVERY_EMAIL_NOTIFICATION_TEST_TOPIC"
+      groupId: "password_recovery_email_notification_test_group"
+      properties:
+        auto-offset-reset: "latest"
+server:
+  port: ${SERVER_PORT:8080}
+  host: ${SERVER_HOST:localhost}

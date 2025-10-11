@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SimpleMailSender implements MailSender {
 
-    @Value("${message.from}")
+    @Value("${spring.mail.username}")
     private String MESSAGE_FROM;
 
     private final JavaMailSender javaMailSender;
