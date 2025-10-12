@@ -32,7 +32,7 @@ kafka:
   port: ${KAFKA_PORT:9092}
   host: ${KAFKA_HOST:localhost}
   events:
-    password-recovery-email-notification-event:
+    password-recovery-event:
       topic: "PASSWORD_RECOVERY_EMAIL_NOTIFICATION_TEST_TOPIC"
       groupId: "password_recovery_email_notification_test_group"
       properties:

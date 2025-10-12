@@ -26,7 +26,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class NotificationEventConsumerKafkaIntegrationTest {
+public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
 
     @Autowired
     private TestProducer testProducer;
@@ -60,7 +60,7 @@ public class NotificationEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordNotificationEvent_shouldSendEmailNotification_andDeleteOldToken() {
+    void listenRecoveryPasswordEvent_shouldSendEmailNotification_andDeleteOldToken() {
         String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);
@@ -83,7 +83,7 @@ public class NotificationEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordNotificationEvent_shouldNotSendNotification_whenTokenHasExpired() {
+    void listenRecoveryPasswordEvent_shouldNotSendNotification_whenTokenHasExpired() {
         String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);

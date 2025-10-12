@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationEventConsumer {
+public class PasswordRecoveryEventConsumer {
 
     private final EmailNotificationService emailNotificationService;
 
     @KafkaListener(
-            topics = "${kafka.events.password-recovery-email-notification-event.topic}",
-            groupId = "${kafka.events.password-recovery-email-notification-event.groupId}",
-            properties = {"auto.offset.reset: ${kafka.events.password-recovery-email-notification-event.properties.auto-offset-reset}"}
+            topics = "${kafka.events.password-recovery-event.topic}",
+            groupId = "${kafka.events.password-recovery-event.groupId}",
+            properties = {"auto.offset.reset: ${kafka.events.password-recovery-event.properties.auto-offset-reset}"}
     )
-    public void listenRecoveryPasswordNotificationEvent(@Payload String token) {
+    public void listenPasswordRecoveryEvent(@Payload String token) {
         log.info("Received token for password recovery: {}", token);
         emailNotificationService.sendRecoveryPasswordEmail(token);
     }
