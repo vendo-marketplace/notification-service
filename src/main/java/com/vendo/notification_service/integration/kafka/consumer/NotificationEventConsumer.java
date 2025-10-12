@@ -17,7 +17,7 @@ public class NotificationEventConsumer {
     @KafkaListener(
             topics = "${kafka.events.password-recovery-email-notification-event.topic}",
             groupId = "${kafka.events.password-recovery-email-notification-event.groupId}",
-            properties = "${kafka.events.password-recovery-email-notification-event.properties.auto-offset-reset}"
+            properties = {"auto.offset.reset: ${kafka.events.password-recovery-email-notification-event.properties.auto-offset-reset}"}
     )
     public void listenRecoveryPasswordNotificationEvent(@Payload String token) {
         log.info("Received token for password recovery: {}", token);
