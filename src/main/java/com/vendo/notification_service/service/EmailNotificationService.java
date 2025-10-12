@@ -34,7 +34,10 @@ public class EmailNotificationService {
             throw new RedisValueExpiredException("Password recovery token has expired");
         }
 
-        redisService.deleteValues(List.of(token, email.get()));
+        redisService.deleteValues(List.of(
+                redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + token,
+                redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + email.get()
+        ));
 
         String passwordRecoveryLink = buildPasswordRecoveryLink(token);
         simpleMailSender.sendMail("Recovery password", email.get(), "Link for password recovery: " + passwordRecoveryLink);

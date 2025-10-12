@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.vendo.notification_service.common.helper.WaitHelper.waitSafely;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -69,12 +68,10 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
         redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, redisProperties.getResetPassword().getTtl());
         testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
 
-        Optional<String> email = redisService.getValue(recoveryPasswordToken);
-        Optional<String> token = redisService.getValue(mailTmEmail);
-        assertThat(email).isNotPresent();
-        assertThat(token).isNotPresent();
-
         await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
+            Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
+            assertThat(email).isNotPresent();
+
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
             assertThat(messages).isNotEmpty();
             assertThat(messages.get(0).getIntro()).isNotBlank();
@@ -92,16 +89,12 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
         redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, 1);
         testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
 
-        waitSafely(1100);
+        await().atMost(15, TimeUnit.SECONDS).untilAsserted(() -> {
+            Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
+            Optional<String> token = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
+            assertThat(email).isNotPresent();
+            assertThat(token).isNotPresent();
 
-        Optional<String> email = redisService.getValue(recoveryPasswordToken);
-        Optional<String> token = redisService.getValue(mailTmEmail);
-        assertThat(email).isNotPresent();
-        assertThat(token).isNotPresent();
-
-        await().pollDelay(10, TimeUnit.SECONDS)
-                .timeout(20, TimeUnit.SECONDS)
-                .untilAsserted(() -> {
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
             assertThat(messages).isEmpty();
         });

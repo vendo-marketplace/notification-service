@@ -33,10 +33,10 @@ kafka:
   host: ${KAFKA_HOST:localhost}
   events:
     password-recovery-event:
-      topic: "PASSWORD_RECOVERY_EMAIL_NOTIFICATION_TEST_TOPIC"
-      groupId: "password_recovery_email_notification_test_group"
+      topic: "PASSWORD_RECOVERY_TEST_TOPIC"
+      groupId: "password_recovery_test_group"
       properties:
-        auto-offset-reset: "latest"
+        auto-offset-reset: "earliest"
 server:
   port: ${SERVER_PORT:8080}
   host: ${SERVER_HOST:localhost}

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestProducer {
 
-    @Value("${kafka.events.password-recovery-email-notification-event.topic}")
+    @Value("${kafka.events.password-recovery-event.topic}")
     private String passwordRecoveryEmailNotificationEventTopic;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
