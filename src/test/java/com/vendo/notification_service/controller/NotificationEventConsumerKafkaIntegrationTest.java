@@ -60,7 +60,7 @@ public class NotificationEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordNotificationEvent_shouldConsumeMessage_andSendEmailNotification() {
+    void listenRecoveryPasswordNotificationEvent_shouldSendEmailNotification_andDeleteOldToken() {
         String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);
@@ -83,7 +83,7 @@ public class NotificationEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordNotificationEvent_shouldNotSendNotification() {
+    void listenRecoveryPasswordNotificationEvent_shouldNotSendNotification_whenTokenHasExpired() {
         String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);
