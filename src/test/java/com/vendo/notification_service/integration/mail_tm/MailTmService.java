@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.vendo.notification_service.common.helper.WaitHelper.waitSafely;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -16,15 +14,14 @@ public class MailTmService {
 
     private final MailTmClient mailTmClient;
 
-    public String createAddressWithDomainOncePerSecond(String emailPrefix, String password) {
+    public String createAddressWithDomain(String emailPrefix, String password) {
         GetDomainsResponse domains = mailTmClient.getDomains();
         GetDomainsResponse.Domain domain = domains.getDomains().get(0);
 
         String mailTmAddress = "%s@%s".formatted(emailPrefix, domain.getDomain());
 
-        mailTmClient.createAccount(mailTmAddress, password);
+        mailTmClient.createAccountRetrying(mailTmAddress, password);
 
-        waitSafely(1100);
         return mailTmAddress;
     }
 

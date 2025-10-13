@@ -64,7 +64,7 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);
 
-        String mailTmEmail = mailTmService.createAddressWithDomainOncePerSecond(emailPrefix, password);
+        String mailTmEmail = mailTmService.createAddressWithDomain(emailPrefix, password);
         redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, redisProperties.getResetPassword().getTtl());
         testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
 
@@ -85,16 +85,18 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
         String emailPrefix = recoveryPasswordToken.substring(0, 6);
         String password = recoveryPasswordToken.substring(0, 6);
 
-        String mailTmEmail = mailTmService.createAddressWithDomainOncePerSecond(emailPrefix, password);
+        String mailTmEmail = mailTmService.createAddressWithDomain(emailPrefix, password);
         redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, 1);
         testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
 
-        await().atMost(15, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
             Optional<String> token = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
             assertThat(email).isNotPresent();
             assertThat(token).isNotPresent();
+        });
 
+        await().pollDelay(10, TimeUnit.SECONDS).atMost(15, TimeUnit.SECONDS).untilAsserted(() -> {
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
             assertThat(messages).isEmpty();
         });

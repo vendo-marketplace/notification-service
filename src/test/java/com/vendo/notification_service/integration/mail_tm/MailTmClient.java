@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import static com.vendo.notification_service.common.helper.WaitHelper.waitSafely;
 import static com.vendo.security.common.constants.AuthConstants.AUTHORIZATION_HEADER;
 import static com.vendo.security.common.constants.AuthConstants.BEARER_PREFIX;
 
@@ -29,27 +30,34 @@ public class MailTmClient {
 
     private static final String MAIL_TM_BASE_URL= "https://api.mail.tm";
 
-    public void createAccount(String address, String password) {
-        try {
-            String createAccountUrl = MAIL_TM_BASE_URL + "/accounts";
-            AccountRequest accountRequest = AccountRequest.builder()
-                    .address(address)
-                    .password(password)
-                    .build();
+    public void createAccount(String address, String password) throws IOException {
+        String createAccountUrl = MAIL_TM_BASE_URL + "/accounts";
+        AccountRequest accountRequest = AccountRequest.builder()
+                .address(address)
+                .password(password)
+                .build();
 
-            RequestBody requestBody = RequestBody.create(objectMapper.writeValueAsString(accountRequest), MediaType.get("application/json"));
-            Request request = new Request.Builder()
-                    .url(createAccountUrl)
-                    .post(requestBody)
-                    .build();
+        RequestBody requestBody = RequestBody.create(objectMapper.writeValueAsString(accountRequest), MediaType.get("application/json"));
+        Request request = new Request.Builder()
+                .url(createAccountUrl)
+                .post(requestBody)
+                .build();
 
-            Response response = okHttpClient.newCall(request).execute();
+        try (Response response = okHttpClient.newCall(request).execute()){
             okHttpHelper.buildResponseBodyOrThrow(response, "MailTmApi error: " + response.code() + " - " + response.message());
-            response.close();
+        }
+    }
 
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException("Exception while creating account in MailTm");
+    public void createAccountRetrying(String address, String password) {
+        int attempts = 3;
+        while (attempts != 0) {
+            try {
+                createAccount(address, password);
+                return;
+            } catch (IOException e) {
+                attempts--;
+                waitSafely(1000);
+            }
         }
     }
 
