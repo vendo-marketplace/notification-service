@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,11 +32,6 @@ public class EmailNotificationService {
         if (email.isEmpty()) {
             throw new RedisValueExpiredException("Password recovery token has expired");
         }
-
-        redisService.deleteValues(List.of(
-                redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + token,
-                redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + email.get()
-        ));
 
         String passwordRecoveryLink = buildPasswordRecoveryLink(token);
         simpleMailSender.sendMail("Recovery password", email.get(), "Link for password recovery: " + passwordRecoveryLink);

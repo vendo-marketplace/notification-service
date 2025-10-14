@@ -70,7 +70,7 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
 
         await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
             Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
-            assertThat(email).isNotPresent();
+            assertThat(email).isPresent();
 
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
             assertThat(messages).isNotEmpty();
