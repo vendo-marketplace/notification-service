@@ -1,10 +1,9 @@
 package com.vendo.notification_service.service;
 
+import com.vendo.integration.redis.common.exception.RedisValueExpiredException;
 import com.vendo.notification_service.integration.redis.common.config.RedisProperties;
-import com.vendo.notification_service.integration.redis.common.exception.RedisValueExpiredException;
 import com.vendo.notification_service.integration.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EmailNotificationService {
 
-    @Value("${server.host}")
-    private String SERVER_HOST;
-
-    @Value("${server.port}")
-    private int SERVER_PORT;
-
     private final SimpleMailSender simpleMailSender;
 
     private final RedisService redisService;
@@ -27,17 +20,12 @@ public class EmailNotificationService {
     private final RedisProperties redisProperties;
 
     @Transactional
-    public void sendRecoveryPasswordEmail(String token) {
-        Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + token);
-        if (email.isEmpty()) {
-            throw new RedisValueExpiredException("Password recovery token has expired");
+    public void sendRecoveryPasswordEmail(String email) {
+        Optional<String> otp = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + email);
+        if (otp.isEmpty()) {
+            throw new RedisValueExpiredException("Otp has expired");
         }
 
-        String passwordRecoveryLink = buildPasswordRecoveryLink(token);
-        simpleMailSender.sendMail("Recovery password", email.get(), "Link for password recovery: " + passwordRecoveryLink);
-    }
-
-    private String buildPasswordRecoveryLink(String token) {
-        return "http://%s:%d/auth/reset-password?token=%s".formatted(SERVER_HOST, SERVER_PORT, token);
+        simpleMailSender.sendMail("Recovery password", email, "Use this OTP for password recovery: [%s]".formatted(otp.get()));
     }
 }

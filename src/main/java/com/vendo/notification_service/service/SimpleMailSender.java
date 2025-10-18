@@ -1,8 +1,8 @@
 package com.vendo.notification_service.service;
 
 import com.vendo.notification_service.common.MailSender;
+import com.vendo.notification_service.common.config.MailProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SimpleMailSender implements MailSender {
 
-    @Value("${spring.mail.username}")
-    private String MESSAGE_FROM;
+    private final MailProperties mailProperties;
 
     private final JavaMailSender javaMailSender;
 
@@ -23,7 +22,7 @@ public class SimpleMailSender implements MailSender {
         message.setSubject(subject);
         message.setText(text);
         message.setTo(to);
-        message.setFrom(MESSAGE_FROM);
+        message.setFrom(mailProperties.getFrom());
 
         javaMailSender.send(message);
     }
