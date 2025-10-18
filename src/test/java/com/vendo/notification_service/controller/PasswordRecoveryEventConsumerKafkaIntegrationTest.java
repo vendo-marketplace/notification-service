@@ -7,7 +7,6 @@ import com.vendo.notification_service.integration.redis.service.RedisService;
 import com.vendo.notification_service.kafka.producer.TestProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.TestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +60,7 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordEvent_shouldSendEmailNotification_andDeleteOldToken() {
+    void listenRecoveryPasswordEvent_shouldSendEmailNotification() {
         Integer otp = 123456;
         String emailName = UUID.randomUUID().toString().substring(0, 6);
         String password = UUID.randomUUID().toString().substring(0, 6);
@@ -74,14 +73,10 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
             Optional<String> redisOtp = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
             assertThat(redisOtp).isPresent();
 
-            try {
-                List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
-                assertThat(messages).isNotEmpty();
-                assertThat(messages.get(0).getIntro()).isNotBlank();
-                assertThat(messages.get(0).getIntro().contains(redisOtp.get())).isTrue();
-            } catch (RuntimeException e) {
-                throw new TestAbortedException("Skipping test because of exception: " + e.getMessage(), e);
-            }
+            List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
+            assertThat(messages).isNotEmpty();
+            assertThat(messages.get(0).getIntro()).isNotBlank();
+            assertThat(messages.get(0).getIntro().contains(redisOtp.get())).isTrue();
         });
     }
 
