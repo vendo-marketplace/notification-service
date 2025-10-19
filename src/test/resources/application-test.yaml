@@ -23,11 +23,14 @@ eureka:
     enabled: false
 
 redis:
-  reset-password:
-    prefixes:
-      email-prefix: "test-email-prefix:"
-      otp-prefix: "test-otp-prefix:"
-    ttl: 600
+  password-recovery:
+    email:
+      prefix: "test-email-prefix:"
+      ttl: 600
+    otp:
+      prefix: "test-otp-prefix:"
+      ttl: 600
+
 
 kafka:
   events:

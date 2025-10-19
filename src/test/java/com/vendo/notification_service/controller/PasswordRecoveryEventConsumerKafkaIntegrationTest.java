@@ -62,15 +62,16 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
     @Test
     void listenRecoveryPasswordEvent_shouldSendEmailNotification() {
         Integer otp = 123456;
+        RedisProperties.PasswordRecovery passwordRecovery = redisProperties.getPasswordRecovery();
         String emailName = UUID.randomUUID().toString().substring(0, 6);
         String password = UUID.randomUUID().toString().substring(0, 6);
 
         String mailTmEmail = mailTmService.createAddressWithDomain(emailName, password);
-        redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail, String.valueOf(otp), redisProperties.getResetPassword().getTtl());
+        redisService.saveValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail), String.valueOf(otp), passwordRecovery.getEmail().getTtl());
         testProducer.sendRecoveryPasswordEvent(mailTmEmail);
 
         await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
-            Optional<String> redisOtp = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
+            Optional<String> redisOtp = redisService.getValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail));
             assertThat(redisOtp).isPresent();
 
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
@@ -83,17 +84,18 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
     @Test
     void listenRecoveryPasswordEvent_shouldNotSendEmailNotification_whenOtpHasExpired() {
         Integer otp = 123456;
+        RedisProperties.PasswordRecovery passwordRecovery = redisProperties.getPasswordRecovery();
         String emailName = UUID.randomUUID().toString().substring(0, 6);
         String password = UUID.randomUUID().toString().substring(0, 6);
 
         String mailTmEmail = mailTmService.createAddressWithDomain(emailName, password);
-        redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail, String.valueOf(otp), 1);
+        redisService.saveValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail), String.valueOf(otp), 1);
         testProducer.sendRecoveryPasswordEvent(mailTmEmail);
 
         waitSafely(1000);
 
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
-            Optional<String> redisOtp = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
+            Optional<String> redisOtp = redisService.getValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail));
             assertThat(redisOtp).isNotPresent();
         });
 

@@ -29,42 +29,19 @@ public class MailProperties {
 
         private Mail mail;
 
+        @Getter
+        @Setter
+        public static class Mail {
+
+            private Transport transport;
+
+            @Getter
+            @Setter
+            public static class Transport {
+
+                private String protocol;
+
+            }
+        }
     }
-
-    @Getter
-    @Setter
-    public static class Mail {
-
-        private Transport transport;
-
-        private Smtp smtp;
-
-    }
-
-    @Getter
-    @Setter
-    public static class Transport {
-
-        private String protocol;
-
-    }
-
-    @Getter
-    @Setter
-    public static class Smtp {
-
-        private String auth;
-
-        private Starttls starttls;
-
-    }
-
-    @Getter
-    @Setter
-    public static class Starttls {
-
-        private Boolean enable;
-
-    }
-
 }

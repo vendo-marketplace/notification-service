@@ -19,8 +19,8 @@ public class EmailNotificationService {
 
     private final RedisProperties redisProperties;
 
-    public void sendRecoveryPasswordEmail(String email) {
-        Optional<String> otp = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + email);
+    public void sendRecoveryPasswordOtp(String email) {
+        Optional<String> otp = redisService.getValue(redisProperties.getPasswordRecovery().getEmail().buildPrefix(email));
         if (otp.isEmpty()) {
             throw new RedisValueExpiredException("Otp has expired");
         }

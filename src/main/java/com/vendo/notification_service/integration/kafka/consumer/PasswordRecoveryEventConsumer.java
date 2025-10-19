@@ -21,6 +21,6 @@ public class PasswordRecoveryEventConsumer {
     )
     public void listenPasswordRecoveryEvent(@Payload String email) {
         log.info("Received event for password recovery: {}", email);
-        emailNotificationService.sendRecoveryPasswordEmail(email);
+        emailNotificationService.sendRecoveryPasswordOtp(email);
     }
 }

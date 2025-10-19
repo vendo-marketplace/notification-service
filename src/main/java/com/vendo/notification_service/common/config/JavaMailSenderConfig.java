@@ -26,8 +26,8 @@ public class JavaMailSenderConfig {
         mailSender.setPassword(mailProperties.getPassword());
 
         Properties properties = new Properties();
-        properties.put("mail.smtp.auth", mailProperties.getProperties().getMail().getSmtp().getAuth());
-        properties.put("mail.smtp.starttls.enable", mailProperties.getProperties().getMail().getSmtp().getStarttls().getEnable());
+        properties.put("mail.smtp.auth", true);
+        properties.put("mail.smtp.starttls.enable", true);
         properties.put("mail.smtp.starttls.required", true);
         mailSender.setJavaMailProperties(properties);
 
