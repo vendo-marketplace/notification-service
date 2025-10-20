@@ -16,7 +16,7 @@ public class TestProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendRecoveryPasswordEvent(String email) {
+    public void sendPasswordRecoveryEvent(String email) {
         log.info("Sent event for password recovery: {}", email);
         kafkaTemplate.send(passwordRecoveryEventTopic, email);
     }
