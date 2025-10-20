@@ -59,42 +59,34 @@ public class PasswordRecoveryEventConsumerKafkaIntegrationTest {
     }
 
     @Test
-    void listenRecoveryPasswordEvent_shouldSendEmailNotification_andDeleteOldToken() {
-        String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
-        String emailPrefix = recoveryPasswordToken.substring(0, 6);
-        String password = recoveryPasswordToken.substring(0, 6);
+    void listenPasswordRecoveryEvent_shouldSendEmailNotification() {
+        Integer otp = 123456;
+        RedisProperties.PasswordRecovery passwordRecovery = redisProperties.getPasswordRecovery();
+        String emailName = UUID.randomUUID().toString().substring(0, 6);
+        String password = UUID.randomUUID().toString().substring(0, 6);
 
-        String mailTmEmail = mailTmService.createAddressWithDomain(emailPrefix, password);
-        redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, redisProperties.getResetPassword().getTtl());
-        testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
+        String mailTmEmail = mailTmService.createAddressWithDomain(emailName, password);
+        redisService.saveValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail), String.valueOf(otp), passwordRecovery.getEmail().getTtl());
+        testProducer.sendPasswordRecoveryEvent(mailTmEmail);
 
         await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
-            Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
-            assertThat(email).isPresent();
+            Optional<String> redisOtp = redisService.getValue(passwordRecovery.getEmail().buildPrefix(mailTmEmail));
+            assertThat(redisOtp).isPresent();
 
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
             assertThat(messages).isNotEmpty();
             assertThat(messages.get(0).getIntro()).isNotBlank();
-            assertThat(messages.get(0).getIntro().contains(recoveryPasswordToken)).isTrue();
+            assertThat(messages.get(0).getIntro().contains(redisOtp.get())).isTrue();
         });
     }
 
     @Test
-    void listenRecoveryPasswordEvent_shouldNotSendNotification_whenTokenHasExpired() {
-        String recoveryPasswordToken = String.valueOf(UUID.randomUUID());
-        String emailPrefix = recoveryPasswordToken.substring(0, 6);
-        String password = recoveryPasswordToken.substring(0, 6);
+    void listenPasswordRecoveryEvent_shouldNotSendEmailNotification_whenOtpHasExpired() {
+        String emailName = UUID.randomUUID().toString().substring(0, 6);
+        String password = UUID.randomUUID().toString().substring(0, 6);
 
-        String mailTmEmail = mailTmService.createAddressWithDomain(emailPrefix, password);
-        redisService.saveValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken, mailTmEmail, 1);
-        testProducer.sendRecoveryPasswordNotificationEvent(recoveryPasswordToken);
-
-        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
-            Optional<String> email = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getTokenPrefix() + recoveryPasswordToken);
-            Optional<String> token = redisService.getValue(redisProperties.getResetPassword().getPrefixes().getEmailPrefix() + mailTmEmail);
-            assertThat(email).isNotPresent();
-            assertThat(token).isNotPresent();
-        });
+        String mailTmEmail = mailTmService.createAddressWithDomain(emailName, password);
+        testProducer.sendPasswordRecoveryEvent(mailTmEmail);
 
         await().pollDelay(10, TimeUnit.SECONDS).atMost(15, TimeUnit.SECONDS).untilAsserted(() -> {
             List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();

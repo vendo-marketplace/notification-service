@@ -5,9 +5,6 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Getter
 @Setter
 @Configuration
@@ -22,6 +19,29 @@ public class MailProperties {
 
     private String password;
 
-    private Map<String, String> properties = new HashMap<>();
+    private String from;
 
+    private Properties properties;
+
+    @Getter
+    @Setter
+    public static class Properties {
+
+        private Mail mail;
+
+        @Getter
+        @Setter
+        public static class Mail {
+
+            private Transport transport;
+
+            @Getter
+            @Setter
+            public static class Transport {
+
+                private String protocol;
+
+            }
+        }
+    }
 }

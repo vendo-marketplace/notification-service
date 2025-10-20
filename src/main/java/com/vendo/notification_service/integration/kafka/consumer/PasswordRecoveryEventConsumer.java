@@ -19,8 +19,8 @@ public class PasswordRecoveryEventConsumer {
             groupId = "${kafka.events.password-recovery-event.groupId}",
             properties = {"auto.offset.reset: ${kafka.events.password-recovery-event.properties.auto-offset-reset}"}
     )
-    public void listenPasswordRecoveryEvent(@Payload String token) {
-        log.info("Received token for password recovery: {}", token);
-        emailNotificationService.sendRecoveryPasswordEmail(token);
+    public void listenPasswordRecoveryEvent(@Payload String email) {
+        log.info("Received event for password recovery: {}", email);
+        emailNotificationService.sendPasswordRecoveryOtp(email);
     }
 }
