@@ -27,4 +27,13 @@ public class EmailNotificationService {
 
         mailSender.sendMail("Password recovery", email, "Use this OTP for password recovery: %s".formatted(otp.get()));
     }
+
+    public void sendEmailVerificationOtp(String email) {
+        Optional<String> otp = redisService.getValue(redisProperties.getEmailVerification().getEmail().buildPrefix(email));
+        if (otp.isEmpty()) {
+            throw new RedisValueExpiredException("Otp has expired");
+        }
+
+        mailSender.sendMail("Email Verification", email,  "Use this OTP to verify your email: %s".formatted(otp.get()));
+    }
 }
