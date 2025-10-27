@@ -4,7 +4,7 @@ import com.vendo.notification_service.integration.mail_tm.MailTmService;
 import com.vendo.notification_service.integration.mail_tm.dto.GetMessagesResponse;
 import com.vendo.notification_service.integration.redis.common.config.RedisProperties;
 import com.vendo.notification_service.integration.redis.service.RedisService;
-import com.vendo.notification_service.kafka.producer.TestProducer;
+import com.vendo.notification_service.integration.kafka.producer.TestProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

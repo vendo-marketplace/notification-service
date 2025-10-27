@@ -1,4 +1,4 @@
-package com.vendo.notification_service.kafka.producer;
+package com.vendo.notification_service.integration.kafka.producer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
