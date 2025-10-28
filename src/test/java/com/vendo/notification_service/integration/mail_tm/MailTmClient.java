@@ -2,10 +2,11 @@ package com.vendo.notification_service.integration.mail_tm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendo.notification_service.common.helper.OkHttpHelper;
-import com.vendo.notification_service.integration.mail_tm.dto.AccountRequest;
-import com.vendo.notification_service.integration.mail_tm.dto.GetDomainsResponse;
-import com.vendo.notification_service.integration.mail_tm.dto.GetMessagesResponse;
-import com.vendo.notification_service.integration.mail_tm.dto.GetTokenResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.AccountRequest;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetDomainsResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetMessagesResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetTokenResponse;
+import com.vendo.notification_service.integration.mail_tm.common.exception.MailTmException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -81,7 +82,7 @@ public class MailTmClient {
 
             return objectMapper.readValue(responseBody, GetTokenResponse.class);
         } catch (IOException e) {
-            throw new RuntimeException("Exception while getting token from MailTm");
+            throw new MailTmException("Exception while getting token from MailTm");
         }
     }
 
@@ -99,12 +100,12 @@ public class MailTmClient {
 
             GetDomainsResponse getDomainsResponse = objectMapper.readValue(responseBody, GetDomainsResponse.class);
             if (getDomainsResponse.getTotalItems() == 0) {
-                throw new RuntimeException("No domain found in MailTm");
+                throw new MailTmException("No domain found in MailTm");
             }
 
             return getDomainsResponse;
         } catch (IOException e) {
-            throw new RuntimeException("Exception while getting domains from MailTm");
+            throw new MailTmException("Exception while getting domains from MailTm");
         }
     }
 
@@ -123,7 +124,8 @@ public class MailTmClient {
 
             return objectMapper.readValue(responseBody, GetMessagesResponse.class);
         } catch (IOException e) {
-            throw new RuntimeException("Exception while getting messages from MailTm");
+            log.error(e.getMessage());
+            throw new MailTmException("Exception while getting messages from MailTm");
         }
     }
 }

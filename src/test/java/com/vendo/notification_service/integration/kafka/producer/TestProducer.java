@@ -1,5 +1,6 @@
 package com.vendo.notification_service.integration.kafka.producer;
 
+import com.vendo.integration.kafka.event.EmailOtpEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,21 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestProducer {
 
-    @Value("${kafka.events.password-recovery-event.topic}")
-    private String passwordRecoveryEventTopic;
+    @Value("${kafka.events.email-otp-notification-event.topic}")
+    private String emailOtpNotificationEventTopic;
 
-    @Value("${kafka.events.email-verification-event.topic}")
-    private String emailVerificationEventTopic;
+    private final KafkaTemplate<String, EmailOtpEvent> kafkaTemplate;
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-
-    public void sendPasswordRecoveryEvent(String email) {
-        log.info("Sent event for password recovery: {}", email);
-        kafkaTemplate.send(passwordRecoveryEventTopic, email);
-    }
-
-    public void sendEmailVerificationEvent(String email) {
-        log.info("Sent event for email verification: {}", email);
-        kafkaTemplate.send(emailVerificationEventTopic, email);
+    public void sendEmailOtpNotificationEvent(EmailOtpEvent event) {
+        log.info("Sent event for email otp notification: {}", event);
+        kafkaTemplate.send(emailOtpNotificationEventTopic, event);
     }
 }

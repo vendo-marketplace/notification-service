@@ -1,8 +1,8 @@
 package com.vendo.notification_service.integration.mail_tm;
 
-import com.vendo.notification_service.integration.mail_tm.dto.GetDomainsResponse;
-import com.vendo.notification_service.integration.mail_tm.dto.GetMessagesResponse;
-import com.vendo.notification_service.integration.mail_tm.dto.GetTokenResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetDomainsResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetMessagesResponse;
+import com.vendo.notification_service.integration.mail_tm.common.dto.GetTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
