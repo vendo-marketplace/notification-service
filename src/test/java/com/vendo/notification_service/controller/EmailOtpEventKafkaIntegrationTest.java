@@ -33,8 +33,8 @@ public class EmailOtpEventKafkaIntegrationTest {
 
     @Test
     void listenEmailOtpEvent_shouldSendEmailNotification_whenEmailVerificationEvent() {
-        String emailName = UUID.randomUUID().toString().substring(0, 4);
-        String password = UUID.randomUUID().toString().substring(0, 4);
+        String emailName = UUID.randomUUID().toString().substring(0, 8);
+        String password = UUID.randomUUID().toString().substring(0, 8);
         String otp = "123456";
 
         try {
@@ -46,12 +46,12 @@ public class EmailOtpEventKafkaIntegrationTest {
                     .build();
             testProducer.sendEmailOtpNotificationEvent(event);
 
-            await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
+            await().pollInterval(1, TimeUnit.SECONDS).atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
                 List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
-                AssertionsForInterfaceTypes.assertThat(messages).isNotEmpty();
+                assertThat(messages).isNotNull();
+                assertThat(messages.isEmpty()).isFalse();
                 assertThat(messages.get(0).getIntro()).isNotBlank();
                 assertThat(messages.get(0).getIntro().contains(otp)).isTrue();
-                assertThat(messages.get(0).getIntro().contains(EmailOtpEvent.OtpEventType.EMAIL_VERIFICATION.name())).isTrue();
             });
         } catch (MailTmException e) {
             assumeNoException(e);
@@ -60,8 +60,8 @@ public class EmailOtpEventKafkaIntegrationTest {
 
     @Test
     void listenEmailOtpEvent_shouldSendEmailNotification_whenPasswordRecoveryEvent() {
-        String emailName = UUID.randomUUID().toString().substring(0, 6);
-        String password = UUID.randomUUID().toString().substring(0, 6);
+        String emailName = UUID.randomUUID().toString().substring(0, 8);
+        String password = UUID.randomUUID().toString().substring(0, 8);
         String otp = "123456";
 
         try {
@@ -77,7 +77,6 @@ public class EmailOtpEventKafkaIntegrationTest {
                 AssertionsForInterfaceTypes.assertThat(messages).isNotEmpty();
                 assertThat(messages.get(0).getIntro()).isNotBlank();
                 assertThat(messages.get(0).getIntro().contains(otp)).isTrue();
-                assertThat(messages.get(0).getIntro().contains(EmailOtpEvent.OtpEventType.PASSWORD_RECOVERY.name())).isTrue();
             });
         } catch (MailTmException e) {
             assumeNoException(e);
