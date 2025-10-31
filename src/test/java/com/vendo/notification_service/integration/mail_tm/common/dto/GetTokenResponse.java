@@ -1,4 +1,4 @@
-package com.vendo.notification_service.integration.mail_tm.dto;
+package com.vendo.notification_service.integration.mail_tm.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

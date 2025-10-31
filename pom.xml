@@ -65,10 +65,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-		</dependency>
 
 		<!--web dependencies-->
 
@@ -106,7 +102,7 @@
 		<dependency>
 			<groupId>io.github.vendo-marketplace-be</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.6</version>
 		</dependency>
 
 		<!--test dependencies-->
@@ -120,6 +116,12 @@
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<version>3.27.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
