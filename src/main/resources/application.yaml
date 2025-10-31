@@ -2,6 +2,11 @@ spring:
   application:
     name: notification-service
   profiles:
-    active: dev,kafka,mail
+    active: dev
+    include: kafka,mail
   config:
     import: "optional:configserver:${CONFIG_SERVER_URL}/"
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_CLIENT_URL:http://localhost:8020/eureka/}
