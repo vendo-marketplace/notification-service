@@ -23,8 +23,6 @@ public class ProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private List<String> KAFKA_BOOTSTRAP_SERVERS;
 
-    private static final String BOOTSTRAP_ADDRESS_TEMPLATE = "%s:%d";
-
     @Bean
     public ProducerFactory<String, ?> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
