@@ -32,8 +32,7 @@ public class BrevoMailSender implements MailSender {
         try {
             transactionalEmailsApi.sendTransacEmail(email);
         } catch (ApiException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error("Brevo error sending email: {} - {}", e.getMessage(), e.getResponseBody());
         }
     }
 }
