@@ -46,7 +46,7 @@ public class EmailOtpEventKafkaIntegrationTest {
                     .build();
             testProducer.sendEmailOtpNotificationEvent(event);
 
-            await().pollInterval(1, TimeUnit.SECONDS).atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
+            await().pollInterval(2, TimeUnit.SECONDS).atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
                 List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
                 assertThat(messages).isNotNull();
                 assertThat(messages.isEmpty()).isFalse();
@@ -72,6 +72,7 @@ public class EmailOtpEventKafkaIntegrationTest {
                     .otpEventType(EmailOtpEvent.OtpEventType.PASSWORD_RECOVERY)
                     .build();
             testProducer.sendEmailOtpNotificationEvent(event);
+
             await().atMost(25, TimeUnit.SECONDS).untilAsserted(() -> {
                 List<GetMessagesResponse.Message> messages = mailTmService.retrieveTextFromMessage(mailTmEmail, password).getMessages();
                 AssertionsForInterfaceTypes.assertThat(messages).isNotEmpty();

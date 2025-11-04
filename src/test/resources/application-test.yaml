@@ -1,20 +1,6 @@
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-  mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:vendo.marketplace.real@gmail.com}
-    from: ${MAIL_FROM:vendo.marketplace.real@gmail.com}
-    password: ${MAIL_PASSWORD:qivlskruhrwqizxy}
-    properties:
-      mail:
-        transport:
-          protocol: smtp
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
 eureka:
   client:
@@ -28,6 +14,12 @@ kafka:
       container-factory: "consumerContainerFactory"
       properties:
         auto-offset-reset: "earliest"
+
+brevo:
+  sender:
+    name: Vendo Marketplace
+    email: vendo.marketplace.real@gmail.com
+  api-key: ${BREVO_API_KEY}
 
 otp:
   subjects:

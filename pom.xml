@@ -92,6 +92,13 @@
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
 
+		<!--customer manager-->
+		<dependency>
+			<groupId>com.brevo</groupId>
+			<artifactId>brevo</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
         <!--utility dependencies-->
 
 		<dependency>
@@ -128,6 +135,26 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>1.5.19</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.14.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.shared</groupId>
+				<artifactId>maven-shared-utils</artifactId>
+				<version>3.3.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-core</artifactId>
+				<version>3.8.1</version>
+			</dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>

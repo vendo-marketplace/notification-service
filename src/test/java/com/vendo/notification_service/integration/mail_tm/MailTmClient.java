@@ -57,7 +57,7 @@ public class MailTmClient {
                 return;
             } catch (IOException e) {
                 attempts--;
-                waitSafely(1000);
+                waitSafely(2000);
             }
         }
     }

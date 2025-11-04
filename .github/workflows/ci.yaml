@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
 
     services:
       redis:
