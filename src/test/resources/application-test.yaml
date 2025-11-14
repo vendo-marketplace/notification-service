@@ -19,7 +19,7 @@ brevo:
   sender:
     name: Vendo Marketplace
     email: vendo.marketplace.real@gmail.com
-  api-key: ${BREVO_API_KEY}
+  api-key: ${BREVO_API_KEY:test_brevo_api_key}
 
 otp:
   subjects:
