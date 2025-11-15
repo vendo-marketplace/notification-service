@@ -15,6 +15,10 @@ public class EmailOtpNotificationService {
     private final OtpMailProperties otpMailProperties;
 
     public void sendOtpNotification(EmailOtpEvent event) {
+        if (event.getOtpEventType() == null) {
+            throw new IllegalArgumentException("OtpEventType is required but got null.");
+        }
+
         String otpTemplate = otpMailProperties.getTemplates().get(event.getOtpEventType());
         String otpSubject = otpMailProperties.getSubjects().get(event.getOtpEventType());
 
