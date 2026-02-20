@@ -1,6 +1,6 @@
 package com.vendo.notification_service.integration.kafka.consumer;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
+import com.vendo.event_lib.EmailOtpEvent;
 import com.vendo.notification_service.service.otp.service.EmailOtpNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
