@@ -1,4 +1,4 @@
-package com.vendo.notification_service.common.config;
+package com.vendo.notification_service.infrastructure.config.mail;
 
 import brevo.ApiClient;
 import brevoApi.TransactionalEmailsApi;

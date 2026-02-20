@@ -1,7 +1,7 @@
-package com.vendo.notification_service.integration.kafka.consumer;
+package com.vendo.notification_service.adapter.otp.in.messaging.kafka.consumer;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
-import com.vendo.notification_service.service.otp.service.EmailOtpNotificationService;
+import com.vendo.event_lib.EmailOtpEvent;
+import com.vendo.notification_service.port.otp.SendOtpNotificationPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailOtpEventConsumer {
 
-    private final EmailOtpNotificationService emailOtpNotificationService;
+    private final SendOtpNotificationPort sendOtpNotificationPort;
 
     @KafkaListener(
             topics = "${kafka.events.email-otp-notification-event.topic}",
@@ -22,6 +22,6 @@ public class EmailOtpEventConsumer {
     )
     private void listenEmailOtpEvent(EmailOtpEvent event) {
         log.info("Received event for email otp notification: {}", event);
-        emailOtpNotificationService.sendOtpNotification(event);
+        sendOtpNotificationPort.sendOtpNotification(event);
     }
 }

@@ -1,4 +1,4 @@
-package com.vendo.notification_service.common.config;
+package com.vendo.notification_service.infrastructure.config.discovery;
 
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Configuration;
