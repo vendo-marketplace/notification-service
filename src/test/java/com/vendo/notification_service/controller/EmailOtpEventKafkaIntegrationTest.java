@@ -41,13 +41,11 @@ public class EmailOtpEventKafkaIntegrationTest {
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailSender).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test
@@ -60,13 +58,11 @@ public class EmailOtpEventKafkaIntegrationTest {
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailSender).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test
