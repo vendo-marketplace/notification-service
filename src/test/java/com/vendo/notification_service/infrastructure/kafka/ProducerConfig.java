@@ -1,4 +1,4 @@
-package com.vendo.notification_service.integration.kafka.common.config;
+package com.vendo.notification_service.infrastructure.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringSerializer;

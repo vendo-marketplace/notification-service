@@ -1,6 +1,6 @@
-package com.vendo.notification_service.common.builder;
+package com.vendo.notification_service.domain.otp.dto;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
+import com.vendo.event_lib.EmailOtpEvent;
 
 public class EmailOtpEventDataBuilder {
 

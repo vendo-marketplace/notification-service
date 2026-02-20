@@ -1,4 +1,4 @@
-package com.vendo.notification_service.common.config;
+package com.vendo.notification_service.infrastructure.http;
 
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;

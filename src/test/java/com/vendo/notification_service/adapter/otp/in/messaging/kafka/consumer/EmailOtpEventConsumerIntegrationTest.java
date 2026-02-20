@@ -1,10 +1,10 @@
-package com.vendo.notification_service.controller;
+package com.vendo.notification_service.adapter.otp.in.messaging.kafka.consumer;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
-import com.vendo.notification_service.common.MailSender;
-import com.vendo.notification_service.common.builder.EmailOtpEventDataBuilder;
-import com.vendo.notification_service.integration.kafka.producer.TestProducer;
-import com.vendo.notification_service.service.otp.common.config.OtpMailProperties;
+import com.vendo.event_lib.EmailOtpEvent;
+import com.vendo.notification_service.domain.otp.dto.EmailOtpEventDataBuilder;
+import com.vendo.notification_service.infrastructure.config.mail.OtpMailProperties;
+import com.vendo.notification_service.infrastructure.kafka.TestProducer;
+import com.vendo.notification_service.port.mail.MailProviderPort;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,12 +15,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @EmbeddedKafka
 @ActiveProfiles("test")
-public class EmailOtpEventKafkaIntegrationTest {
+public class EmailOtpEventConsumerIntegrationTest {
 
     @Autowired
     private TestProducer testProducer;
@@ -29,7 +30,7 @@ public class EmailOtpEventKafkaIntegrationTest {
     private OtpMailProperties otpMailProperties;
 
     @MockitoBean
-    private MailSender mailSender;
+    private MailProviderPort mailProviderPort;
 
     @Test
     void listenEmailOtpEvent_shouldSendEmailNotification_whenEmailVerificationEvent() {
@@ -42,7 +43,7 @@ public class EmailOtpEventKafkaIntegrationTest {
         testProducer.sendEmailOtpNotificationEvent(event);
 
         await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
+            verify(mailProviderPort).sendMail(
                     otpSubject,
                     event.getEmail(),
                     otpTemplate.formatted(event.getOtp())
@@ -61,7 +62,7 @@ public class EmailOtpEventKafkaIntegrationTest {
         testProducer.sendEmailOtpNotificationEvent(event);
 
         await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
+            verify(mailProviderPort).sendMail(
                     otpSubject,
                     event.getEmail(),
                     otpTemplate.formatted(event.getOtp())
@@ -81,7 +82,7 @@ public class EmailOtpEventKafkaIntegrationTest {
 
         await().pollDelay(3, TimeUnit.SECONDS)
                 .atMost(5, TimeUnit.SECONDS)
-                .untilAsserted(() -> verify(mailSender, never()).sendMail(
+                .untilAsserted(() -> verify(mailProviderPort, never()).sendMail(
                         subject,
                         event.getEmail(),
                         text));
