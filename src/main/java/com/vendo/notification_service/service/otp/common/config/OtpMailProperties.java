@@ -1,6 +1,6 @@
 package com.vendo.notification_service.service.otp.common.config;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
+import com.vendo.event_lib.EmailOtpEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "otp")
-public class OtpMailProperties{
+public class OtpMailProperties {
 
     private Map<EmailOtpEvent.OtpEventType, String> subjects;
 

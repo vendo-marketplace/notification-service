@@ -1,6 +1,6 @@
 package com.vendo.notification_service.controller;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
+import com.vendo.event_lib.EmailOtpEvent;
 import com.vendo.notification_service.common.MailSender;
 import com.vendo.notification_service.common.builder.EmailOtpEventDataBuilder;
 import com.vendo.notification_service.integration.kafka.producer.TestProducer;
@@ -41,13 +41,11 @@ public class EmailOtpEventKafkaIntegrationTest {
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailSender).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test
@@ -60,13 +58,11 @@ public class EmailOtpEventKafkaIntegrationTest {
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailSender).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailSender).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test

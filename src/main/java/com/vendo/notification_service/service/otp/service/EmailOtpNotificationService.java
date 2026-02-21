@@ -1,6 +1,7 @@
 package com.vendo.notification_service.service.otp.service;
 
-import com.vendo.integration.kafka.event.EmailOtpEvent;
+
+import com.vendo.event_lib.EmailOtpEvent;
 import com.vendo.notification_service.common.MailSender;
 import com.vendo.notification_service.service.otp.common.config.OtpMailProperties;
 import lombok.RequiredArgsConstructor;
