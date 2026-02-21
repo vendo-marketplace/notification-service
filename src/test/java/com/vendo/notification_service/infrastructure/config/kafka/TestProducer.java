@@ -1,4 +1,4 @@
-package com.vendo.notification_service.infrastructure.kafka;
+package com.vendo.notification_service.infrastructure.config.kafka;
 
 import com.vendo.event_lib.EmailOtpEvent;
 import lombok.RequiredArgsConstructor;

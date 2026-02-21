@@ -2,9 +2,9 @@ package com.vendo.notification_service.adapter.otp.in.messaging.kafka.consumer;
 
 import com.vendo.event_lib.EmailOtpEvent;
 import com.vendo.notification_service.domain.otp.dto.EmailOtpEventDataBuilder;
-import com.vendo.notification_service.infrastructure.config.mail.OtpMailProperties;
-import com.vendo.notification_service.infrastructure.kafka.TestProducer;
+import com.vendo.notification_service.infrastructure.config.kafka.TestProducer;
 import com.vendo.notification_service.port.mail.MailProviderPort;
+import com.vendo.notification_service.port.otp.OtpTemplateProviderPort;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +27,7 @@ public class EmailOtpEventConsumerIntegrationTest {
     private TestProducer testProducer;
 
     @Autowired
-    private OtpMailProperties otpMailProperties;
+    private OtpTemplateProviderPort otpTemplateProviderPort;
 
     @MockitoBean
     private MailProviderPort mailProviderPort;
@@ -37,18 +37,16 @@ public class EmailOtpEventConsumerIntegrationTest {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
                 .otpEventType(EmailOtpEvent.OtpEventType.EMAIL_VERIFICATION)
                 .build();
-        String otpTemplate = otpMailProperties.getTemplates().get(event.getOtpEventType());
-        String otpSubject = otpMailProperties.getSubjects().get(event.getOtpEventType());
+        String otpTemplate = otpTemplateProviderPort.getTemplate(event.getOtpEventType());
+        String otpSubject = otpTemplateProviderPort.getSubject(event.getOtpEventType());
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailProviderPort).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailProviderPort).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test
@@ -56,18 +54,16 @@ public class EmailOtpEventConsumerIntegrationTest {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
                 .otpEventType(EmailOtpEvent.OtpEventType.PASSWORD_RECOVERY)
                 .build();
-        String otpTemplate = otpMailProperties.getTemplates().get(event.getOtpEventType());
-        String otpSubject = otpMailProperties.getSubjects().get(event.getOtpEventType());
+        String otpTemplate = otpTemplateProviderPort.getTemplate(event.getOtpEventType());
+        String otpSubject = otpTemplateProviderPort.getSubject(event.getOtpEventType());
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(mailProviderPort).sendMail(
-                    otpSubject,
-                    event.getEmail(),
-                    otpTemplate.formatted(event.getOtp())
-            );
-        });
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailProviderPort).sendMail(
+                otpSubject,
+                event.getEmail(),
+                otpTemplate.formatted(event.getOtp())
+        ));
     }
 
     @Test
