@@ -2,13 +2,13 @@ package com.vendo.notification_service.adapter.otp.out.config;
 
 import com.vendo.event_lib.EmailOtpEvent;
 import com.vendo.notification_service.infrastructure.config.mail.OtpMailProperties;
-import com.vendo.notification_service.port.otp.OtpTemplateProviderPort;
+import com.vendo.notification_service.port.otp.OtpTemplatePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OtpTemplateAdapter implements OtpTemplateProviderPort {
+public class OtpTemplateAdapter implements OtpTemplatePort {
 
     private final OtpMailProperties otpMailProperties;
 
