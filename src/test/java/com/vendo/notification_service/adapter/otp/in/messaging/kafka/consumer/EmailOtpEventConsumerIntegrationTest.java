@@ -15,8 +15,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @EmbeddedKafka
@@ -26,7 +25,7 @@ public class EmailOtpEventConsumerIntegrationTest {
     @Autowired
     private TestProducer testProducer;
 
-    @Autowired
+    @MockitoBean
     private OtpTemplatePort otpTemplatePort;
 
     @MockitoBean
@@ -37,15 +36,18 @@ public class EmailOtpEventConsumerIntegrationTest {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
                 .otpEventType(EmailOtpEvent.OtpEventType.EMAIL_VERIFICATION)
                 .build();
-        String otpTemplate = otpTemplatePort.getTemplate(event.getOtpEventType());
-        String otpSubject = otpTemplatePort.getSubject(event.getOtpEventType());
+
+        String template = "Verification code is %s";
+        String subject = "Email Verification";
+        when(otpTemplatePort.getTemplate(event.getOtpEventType())).thenReturn(template);
+        when(otpTemplatePort.getSubject(event.getOtpEventType())).thenReturn(subject);
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
         await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailProviderPort).sendMail(
-                otpSubject,
+                subject,
                 event.getEmail(),
-                otpTemplate.formatted(event.getOtp())
+                template.formatted(event.getOtp())
         ));
     }
 
@@ -54,15 +56,18 @@ public class EmailOtpEventConsumerIntegrationTest {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
                 .otpEventType(EmailOtpEvent.OtpEventType.PASSWORD_RECOVERY)
                 .build();
-        String otpTemplate = otpTemplatePort.getTemplate(event.getOtpEventType());
-        String otpSubject = otpTemplatePort.getSubject(event.getOtpEventType());
+
+        String template = "Verification code is %s";
+        String subject = "Email Verification";
+        when(otpTemplatePort.getTemplate(event.getOtpEventType())).thenReturn(template);
+        when(otpTemplatePort.getSubject(event.getOtpEventType())).thenReturn(subject);
 
         testProducer.sendEmailOtpNotificationEvent(event);
 
         await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> verify(mailProviderPort).sendMail(
-                otpSubject,
+                subject,
                 event.getEmail(),
-                otpTemplate.formatted(event.getOtp())
+                template.formatted(event.getOtp())
         ));
     }
 
