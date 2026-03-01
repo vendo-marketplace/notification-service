@@ -1,4 +1,4 @@
-package com.vendo.notification_service.infrastructure.config.mail;
+package com.vendo.notification_service.adapter.otp.out.props;
 
 import com.vendo.event_lib.EmailOtpEvent;
 import lombok.Getter;
