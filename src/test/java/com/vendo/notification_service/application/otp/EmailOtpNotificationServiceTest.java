@@ -39,6 +39,8 @@ public class EmailOtpNotificationServiceTest {
 
         emailOtpNotificationService.sendOtpNotification(event);
 
+        verify(otpTemplatePort).getTemplate(event.getOtpEventType());
+        verify(otpTemplatePort).getSubject(event.getOtpEventType());
         verify(mailProviderPort).sendMail(
                 subject,
                 event.getEmail(),
@@ -59,6 +61,8 @@ public class EmailOtpNotificationServiceTest {
 
         emailOtpNotificationService.sendOtpNotification(event);
 
+        verify(otpTemplatePort).getTemplate(event.getOtpEventType());
+        verify(otpTemplatePort).getSubject(event.getOtpEventType());
         verify(mailProviderPort).sendMail(
                 subject,
                 event.getEmail(),
@@ -79,6 +83,7 @@ public class EmailOtpNotificationServiceTest {
 
         assertEquals("OtpEventType is required but got null.", exception.getMessage());
 
+        verifyNoInteractions(otpTemplatePort);
         verifyNoInteractions(mailProviderPort);
     }
 }
