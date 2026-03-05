@@ -1,7 +1,3 @@
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-
 eureka:
   client:
     enabled: false
@@ -11,15 +7,14 @@ kafka:
     email-otp-notification-event:
       topic: "EMAIL_OTP_NOTIFICATION_TEST_TOPIC"
       groupId: "email_otp_notification_test_group"
-      container-factory: "consumerContainerFactory"
       properties:
         auto-offset-reset: "earliest"
 
 brevo:
   sender:
     name: Vendo Marketplace
-    email: vendo.marketplace.real@gmail.com
-  api-key: ${BREVO_API_KEY:test_brevo_api_key}
+    email: test@gmail.com
+  api-key: test_brevo_api_key
 
 otp:
   subjects:
