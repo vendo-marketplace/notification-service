@@ -1,25 +1,3 @@
 eureka:
   client:
     enabled: false
-
-kafka:
-  events:
-    email-otp-notification-event:
-      topic: "EMAIL_OTP_NOTIFICATION_TEST_TOPIC"
-      groupId: "email_otp_notification_test_group"
-      properties:
-        auto-offset-reset: "earliest"
-
-brevo:
-  sender:
-    name: Vendo Marketplace
-    email: test@gmail.com
-  api-key: test_brevo_api_key
-
-otp:
-  subjects:
-    EMAIL_VERIFICATION: "Email Verification"
-    PASSWORD_RECOVERY: "Password Recovery"
-  templates:
-    EMAIL_VERIFICATION: "Use this OTP to verify your email: %s"
-    PASSWORD_RECOVERY: "Use this OTP for password recovery: %s"
