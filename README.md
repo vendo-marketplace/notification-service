@@ -97,7 +97,7 @@ This service depends on:
 ## 1. Clone and run Config Server
 
 ```bash
-git clone [https://github.com/vendo-marketplace/config-server](https://github.com/vendo-marketplace/config-server)
+git clone https://github.com/vendo-marketplace/config-server
 cd config-server
 mvn spring-boot:run
 ```
@@ -105,7 +105,7 @@ mvn spring-boot:run
 ## 2. Clone and run Service Registry
 
 ```bash
-git clone [https://github.com/vendo-marketplace/registry-service](https://github.com/vendo-marketplace/registry-service)
+git clone https://github.com/vendo-marketplace/registry-service
 cd registry-service
 mvn spring-boot:run
 ```
