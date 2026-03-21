@@ -125,9 +125,9 @@ java -jar target/notification-service.jar
 
 # Environment Variables
 
-| Variable          | Description       | Default   |
-|-------------------|-------------------|-----------|
-| CONFIG_SERVER_URL | Config server url | 8010      |
+| Variable          | Description       | Default |
+|-------------------|-------------------|---------|
+| CONFIG_SERVER_URL | Config server url | 8060    |
 
 ---
 
@@ -155,9 +155,8 @@ Key principles:
 
 * Clean Architecture
 * SOLID principles
-* Clear separation between layers
 * Constructor injection
-* Event-Driven approach for asynchronous tasks
+* Clear separation between layers
 
 ---
 
