@@ -94,15 +94,7 @@ This service depends on:
 
 ---
 
-## 1. Run Infrastructure (Docker)
-
-Start the required middleware (Kafka, Redis, Zipkin) using the provided configuration:
-
-```bash
-docker-compose up -d
-```
-
-## 2. Clone and run Config Server
+## 1. Clone and run Config Server
 
 ```bash
 git clone [https://github.com/vendo-marketplace/config-server](https://github.com/vendo-marketplace/config-server)
@@ -110,7 +102,7 @@ cd config-server
 mvn spring-boot:run
 ```
 
-## 3. Clone and run Service Registry
+## 2. Clone and run Service Registry
 
 ```bash
 git clone [https://github.com/vendo-marketplace/registry-service](https://github.com/vendo-marketplace/registry-service)
