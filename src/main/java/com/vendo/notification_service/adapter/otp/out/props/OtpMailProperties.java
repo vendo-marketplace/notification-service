@@ -1,6 +1,6 @@
 package com.vendo.notification_service.adapter.otp.out.props;
 
-import com.vendo.event_lib.EmailOtpEvent;
+import com.vendo.event_lib.otp.OtpEventType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,8 +14,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "otp")
 public class OtpMailProperties {
 
-    private Map<EmailOtpEvent.OtpEventType, String> subjects;
+    private Map<OtpEventType, String> subjects;
 
-    private Map<EmailOtpEvent.OtpEventType, String> templates;
+    private Map<OtpEventType, String> templates;
 
 }
