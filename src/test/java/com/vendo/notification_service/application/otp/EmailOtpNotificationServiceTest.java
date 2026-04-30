@@ -1,6 +1,7 @@
 package com.vendo.notification_service.application.otp;
 
-import com.vendo.event_lib.EmailOtpEvent;
+import com.vendo.event_lib.otp.EmailOtpEvent;
+import com.vendo.event_lib.otp.OtpEventType;
 import com.vendo.notification_service.domain.otp.dto.EmailOtpEventDataBuilder;
 import com.vendo.notification_service.port.mail.MailProviderPort;
 import com.vendo.notification_service.port.otp.OtpTemplatePort;
@@ -29,44 +30,44 @@ public class EmailOtpNotificationServiceTest {
     @Test
     void sendEmailOtpEvent_shouldSendEmailNotification_whenEmailVerificationEvent() {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
-                .otpEventType(EmailOtpEvent.OtpEventType.EMAIL_VERIFICATION)
+                .otpEventType(OtpEventType.EMAIL_VERIFICATION)
                 .build();
 
         String template = "Verification code is %s";
         String subject = "Email Verification";
-        when(otpTemplatePort.getTemplate(event.getOtpEventType())).thenReturn(template);
-        when(otpTemplatePort.getSubject(event.getOtpEventType())).thenReturn(subject);
+        when(otpTemplatePort.getTemplate(event.otpEventType())).thenReturn(template);
+        when(otpTemplatePort.getSubject(event.otpEventType())).thenReturn(subject);
 
         emailOtpNotificationService.sendOtpNotification(event);
 
-        verify(otpTemplatePort).getTemplate(event.getOtpEventType());
-        verify(otpTemplatePort).getSubject(event.getOtpEventType());
+        verify(otpTemplatePort).getTemplate(event.otpEventType());
+        verify(otpTemplatePort).getSubject(event.otpEventType());
         verify(mailProviderPort).sendMail(
                 subject,
-                event.getEmail(),
-                template.formatted(event.getOtp())
+                event.email(),
+                template.formatted(event.otp())
         );
     }
 
     @Test
     void sendEmailOtpEvent_shouldSendEmailNotification_whenPasswordRecoveryEvent() {
         EmailOtpEvent event = EmailOtpEventDataBuilder.buildEmailOtpEventWithRequiredFields()
-                .otpEventType(EmailOtpEvent.OtpEventType.PASSWORD_RECOVERY)
+                .otpEventType(OtpEventType.PASSWORD_RECOVERY)
                 .build();
 
         String template = "Recovery code is %s";
         String subject = "Password Recovery";
-        when(otpTemplatePort.getTemplate(event.getOtpEventType())).thenReturn(template);
-        when(otpTemplatePort.getSubject(event.getOtpEventType())).thenReturn(subject);
+        when(otpTemplatePort.getTemplate(event.otpEventType())).thenReturn(template);
+        when(otpTemplatePort.getSubject(event.otpEventType())).thenReturn(subject);
 
         emailOtpNotificationService.sendOtpNotification(event);
 
-        verify(otpTemplatePort).getTemplate(event.getOtpEventType());
-        verify(otpTemplatePort).getSubject(event.getOtpEventType());
+        verify(otpTemplatePort).getTemplate(event.otpEventType());
+        verify(otpTemplatePort).getSubject(event.otpEventType());
         verify(mailProviderPort).sendMail(
                 subject,
-                event.getEmail(),
-                template.formatted(event.getOtp())
+                event.email(),
+                template.formatted(event.otp())
         );
     }
 
