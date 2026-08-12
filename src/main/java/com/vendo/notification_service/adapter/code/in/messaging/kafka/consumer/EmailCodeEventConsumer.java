@@ -21,7 +21,7 @@ public class EmailCodeEventConsumer {
             containerFactory = "${kafka.events.notification.code-email-event.container-factory}"
     )
     private void listenEmailCodeEvent(EmailCodeEvent event) {
-        log.info("Received event for email notification: {}", event);
+        log.info("Received event for code email notification: {}", event);
         emailCodeNotificationUseCase.send(event);
     }
 }
