@@ -64,16 +64,16 @@ src
          └── com.vendo.notification-service
              ├── adapter
              │   ├── mail/out/brevo
-             │   └── otp
+             │   └── code
              │       ├── in/messaging
              │       └── out
              ├── application
-             │   └── otp
+             │   └── code
              ├── infrastructure
              │   └── config
              └── port
                  ├── mail
-                 └── otp
+                 └── code
 ```
 
 ---

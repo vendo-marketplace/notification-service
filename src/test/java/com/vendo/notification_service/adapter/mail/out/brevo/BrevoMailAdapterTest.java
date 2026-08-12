@@ -28,7 +28,7 @@ public class BrevoMailAdapterTest {
     private BrevoMailAdapter brevoMailAdapter;
 
     @Captor
-    private ArgumentCaptor<SendSmtpEmail> captorEmailOtpEvent;
+    private ArgumentCaptor<SendSmtpEmail> captorEmailCodeEvent;
 
     @Test
     void sendMail_shouldCorrectlyMapDataAndCallBrevoApi() throws ApiException {
@@ -38,9 +38,9 @@ public class BrevoMailAdapterTest {
 
         brevoMailAdapter.sendMail(subject, to, text);
 
-        verify(transactionalEmailsApi).sendTransacEmail(captorEmailOtpEvent.capture());
+        verify(transactionalEmailsApi).sendTransacEmail(captorEmailCodeEvent.capture());
 
-        SendSmtpEmail capturedEmail = captorEmailOtpEvent.getValue();
+        SendSmtpEmail capturedEmail = captorEmailCodeEvent.getValue();
 
         assertEquals(subject, capturedEmail.getSubject());
         assertEquals(text, capturedEmail.getTextContent());
