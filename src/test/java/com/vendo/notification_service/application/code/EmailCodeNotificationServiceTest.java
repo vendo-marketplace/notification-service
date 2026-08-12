@@ -38,7 +38,7 @@ public class EmailCodeNotificationServiceTest {
         when(codeTemplatePort.getTemplate(event.type())).thenReturn(template);
         when(codeTemplatePort.getSubject(event.type())).thenReturn(subject);
 
-        emailCodeNotificationService.sendCodeNotification(event);
+        emailCodeNotificationService.send(event);
 
         verify(codeTemplatePort).getTemplate(event.type());
         verify(codeTemplatePort).getSubject(event.type());
@@ -60,7 +60,7 @@ public class EmailCodeNotificationServiceTest {
         when(codeTemplatePort.getTemplate(event.type())).thenReturn(template);
         when(codeTemplatePort.getSubject(event.type())).thenReturn(subject);
 
-        emailCodeNotificationService.sendCodeNotification(event);
+        emailCodeNotificationService.send(event);
 
         verify(codeTemplatePort).getTemplate(event.type());
         verify(codeTemplatePort).getSubject(event.type());
@@ -79,7 +79,7 @@ public class EmailCodeNotificationServiceTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> emailCodeNotificationService.sendCodeNotification(event)
+                () -> emailCodeNotificationService.send(event)
         );
 
         assertEquals("Type is required.", exception.getMessage());
