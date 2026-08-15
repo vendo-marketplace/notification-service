@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class EmailCodeNotificationServiceTest {
+public class CodeEmailNotificationServiceTest {
 
     @Mock
     private MailProviderPort mailProviderPort;
 
     @InjectMocks
-    private EmailCodeNotificationService emailCodeNotificationService;
+    private CodeEmailNotificationService codeEmailNotificationService;
 
     @Test
     void sendEmailCodeEvent_shouldSendEmailNotification_whenEmailVerificationEvent() {
@@ -32,7 +32,7 @@ public class EmailCodeNotificationServiceTest {
         String template = "Verification code is %s";
         String subject = "Email Verification";
 
-        emailCodeNotificationService.send(event);
+        codeEmailNotificationService.send(event);
 
         verify(mailProviderPort).sendMail(
                 subject,
@@ -50,7 +50,7 @@ public class EmailCodeNotificationServiceTest {
         String template = "Recovery url is http://localhost:3100/password-recovery?code=%s";
         String subject = "Password Recovery";
 
-        emailCodeNotificationService.send(event);
+        codeEmailNotificationService.send(event);
 
         verify(mailProviderPort).sendMail(
                 subject,
@@ -67,7 +67,7 @@ public class EmailCodeNotificationServiceTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> emailCodeNotificationService.send(event)
+                () -> codeEmailNotificationService.send(event)
         );
 
         assertEquals("Type is required.", exception.getMessage());

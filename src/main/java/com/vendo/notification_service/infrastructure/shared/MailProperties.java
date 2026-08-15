@@ -1,5 +1,6 @@
 package com.vendo.notification_service.infrastructure.shared;
 
+import com.vendo.event_lib.auto_search.AutoSearchEventType;
 import com.vendo.event_lib.code.CodeEventType;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +15,18 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "notification")
 public class MailProperties {
 
-    private MailTemplate code;
-    private MailTemplate autoSearch;
+    private CodeTemplate code;
+    private AutoSearchTemplate autoSearch;
 
-    public record MailTemplate(
+    public record CodeTemplate(
             Map<CodeEventType, String> subjects,
             Map<CodeEventType, String> templates
+    ) {
+    }
+
+    public record AutoSearchTemplate(
+            Map<AutoSearchEventType, String> subjects,
+            Map<AutoSearchEventType, String> templates
     ) {
     }
 
