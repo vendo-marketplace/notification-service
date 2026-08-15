@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AutoSearchNotificationService implements AutoSearchNotificationUseCase {
+public class AutoSearchEmailNotificationService implements AutoSearchNotificationUseCase {
 
     private final MailProviderPort mailSender;
     private final MailProperties mailProperties;
 
-    private static final String PRODUCT_TEMPLATE = "%s - %d грн \n";
+    private static final String PRODUCT_TEMPLATE = "\t%s - %d грн \n";
 
     @Override
     public void send(AutoSearchEmailEvent event) {

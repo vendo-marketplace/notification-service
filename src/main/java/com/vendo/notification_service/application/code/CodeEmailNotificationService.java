@@ -28,7 +28,10 @@ class CodeEmailNotificationService implements EmailCodeNotificationUseCase {
     }
 
     private void validateEvent(CodeEmailEvent event) {
-        if (!ObjectUtils.isAllNotNull(event, event.type()) || !StringUtils.isNotEmptyAll(event.email(), event.code())) {
+        if (ObjectUtils.isNull(event)
+                || !ObjectUtils.isAllNotNull(event, event.type())
+                || !StringUtils.isNotEmptyAll(event.email(), event.code())
+        ) {
             throw new IllegalArgumentException("Invalid code email event.");
         }
     }
