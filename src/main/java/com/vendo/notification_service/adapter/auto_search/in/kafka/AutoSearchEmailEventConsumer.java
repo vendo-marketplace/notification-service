@@ -20,7 +20,7 @@ public class AutoSearchEmailEventConsumer {
             properties = {"auto.offset.reset: ${kafka.events.notification.auto-search-email-event.properties.auto-offset-reset}"},
             containerFactory = "${kafka.events.notification.auto-search-email-event.container-factory}"
     )
-    private void listenAutoSearchEmailEvent(AutoSearchEmailEvent event) {
+    public void listenAutoSearchEmailEvent(AutoSearchEmailEvent event) {
         log.info("Received event for auto search email notification: {}", event);
         autoSearchNotificationUseCase.send(event);
     }

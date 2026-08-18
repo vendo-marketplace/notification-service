@@ -72,8 +72,11 @@ public class AutoSearchEmailNotificationServiceTest {
         assertThat(content.contains(event.id())).isTrue();
         assertThat(content.contains(event.email())).isTrue();
         assertThat(content.contains(event.products().get(0).title())).isTrue();
+        assertThat(content.contains(event.products().get(0).price().toString())).isTrue();
         assertThat(content.contains(event.products().get(1).title())).isTrue();
+        assertThat(content.contains(event.products().get(1).price().toString())).isTrue();
         assertThat(content.contains(event.products().get(2).title())).isTrue();
+        assertThat(content.contains(event.products().get(2).price().toString())).isTrue();
     }
 
     @ParameterizedTest

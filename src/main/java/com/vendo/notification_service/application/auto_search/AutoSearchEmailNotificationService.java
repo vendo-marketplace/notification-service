@@ -11,6 +11,8 @@ import com.vendo.notification_service.port.mail.MailProviderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class AutoSearchEmailNotificationService implements AutoSearchNotificationUseCase {
@@ -18,7 +20,7 @@ public class AutoSearchEmailNotificationService implements AutoSearchNotificatio
     private final MailProviderPort mailSender;
     private final MailProperties mailProperties;
 
-    private static final String PRODUCT_TEMPLATE = "\t%s - %d грн \n";
+    private static final String PRODUCT_TEMPLATE = "\t%s - %s грн \n";
 
     @Override
     public void send(AutoSearchEmailEvent event) {
@@ -48,7 +50,7 @@ public class AutoSearchEmailNotificationService implements AutoSearchNotificatio
         StringBuilder sb = new StringBuilder();
 
         for (AutoSearchEmailEvent.ResultProduct product : event.products()) {
-            sb.append(PRODUCT_TEMPLATE.formatted(product.title(), product.price().intValue()));
+            sb.append(PRODUCT_TEMPLATE.formatted(product.title(), product.price()));
         }
 
         return sb.toString();
