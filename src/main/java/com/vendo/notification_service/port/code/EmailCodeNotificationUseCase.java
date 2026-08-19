@@ -1,9 +1,9 @@
 package com.vendo.notification_service.port.code;
 
-import com.vendo.event_lib.code.EmailCodeEvent;
+import com.vendo.event_lib.code.CodeEmailEvent;
 
 public interface EmailCodeNotificationUseCase {
 
-    void send(EmailCodeEvent event);
+    void send(CodeEmailEvent event);
 
 }

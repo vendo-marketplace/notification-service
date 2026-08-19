@@ -1,4 +1,4 @@
-package com.vendo.notification_service.adapter.mail.out.brevo;
+package com.vendo.notification_service.adapter.mail.out;
 
 import brevo.ApiException;
 import brevoApi.TransactionalEmailsApi;
