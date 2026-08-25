@@ -14,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -38,7 +36,7 @@ public class AutoSearchEmailNotificationServiceTest {
     private AutoSearchEmailNotificationService autoSearchEmailNotificationService;
 
     private static final String AUTO_SEARCH_SUBJECT = "Found new products matching your search";
-    private static final String AUTO_SEARCH_TEMPLATE = "Hello! We found new products that match your search %s.\n\n%d products found:\n%s\nYou're receiving this email because you subscribed to product search notifications for this query.\n";
+    private static final String AUTO_SEARCH_TEMPLATE = "Hello! We found new products that match your search. Go to: ${client.prod.url}/auto-search/%s/products to view the list.";
 
     private final MailProperties.AutoSearchTemplate autoSearchTemplate = new MailProperties.AutoSearchTemplate(
             Map.of(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, AUTO_SEARCH_SUBJECT),
@@ -70,13 +68,6 @@ public class AutoSearchEmailNotificationServiceTest {
 
         assertThat(subject).isEqualTo(AUTO_SEARCH_SUBJECT);
         assertThat(content.contains(event.id())).isTrue();
-        assertThat(content.contains(event.email())).isTrue();
-        assertThat(content.contains(event.products().get(0).title())).isTrue();
-        assertThat(content.contains(event.products().get(0).price().toString())).isTrue();
-        assertThat(content.contains(event.products().get(1).title())).isTrue();
-        assertThat(content.contains(event.products().get(1).price().toString())).isTrue();
-        assertThat(content.contains(event.products().get(2).title())).isTrue();
-        assertThat(content.contains(event.products().get(2).price().toString())).isTrue();
     }
 
     @ParameterizedTest
@@ -97,8 +88,7 @@ public class AutoSearchEmailNotificationServiceTest {
     private static Stream<AutoSearchEmailEvent> invalidEvents() {
         return Stream.of(
                 null,
-                new AutoSearchEmailEvent("eventId", null, List.of(new AutoSearchEmailEvent.ResultProduct("productId1", "title", BigDecimal.TEN))),
-                new AutoSearchEmailEvent("eventId", "requestId", List.of())
+                new AutoSearchEmailEvent("eventId", null)
         );
     }
 }
