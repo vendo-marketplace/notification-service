@@ -2,23 +2,23 @@ package com.vendo.notification_service.application.auto_search;
 
 import com.vendo.core_lib.utils.ObjectUtils;
 import com.vendo.core_lib.utils.StringUtils;
-import com.vendo.event_lib.auto_search.AutoSearchEmailEvent;
 import com.vendo.event_lib.auto_search.AutoSearchEventType;
+import com.vendo.event_lib.auto_search.AutoSearchReadyEvent;
 import com.vendo.notification_service.infrastructure.shared.MailProperties;
-import com.vendo.notification_service.port.AutoSearchNotificationUseCase;
+import com.vendo.notification_service.port.AutoSearchReadyUseCase;
 import com.vendo.notification_service.port.mail.MailProviderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AutoSearchEmailNotificationService implements AutoSearchNotificationUseCase {
+public class AutoSearchReadyService implements AutoSearchReadyUseCase {
 
     private final MailProviderPort mailSender;
     private final MailProperties mailProperties;
 
     @Override
-    public void send(AutoSearchEmailEvent event) {
+    public void send(AutoSearchReadyEvent event) {
         validateEvent(event);
         MailProperties.AutoSearchTemplate autoSearch = mailProperties.getAutoSearch();
 
@@ -28,7 +28,7 @@ public class AutoSearchEmailNotificationService implements AutoSearchNotificatio
         mailSender.sendMail(subject, event.email(), template.formatted(event.id()));
     }
 
-    private void validateEvent(AutoSearchEmailEvent event) {
+    private void validateEvent(AutoSearchReadyEvent event) {
         if (ObjectUtils.isNull(event) || StringUtils.isEmpty(event.email())) {
             throw new IllegalArgumentException("Invalid auto search event.");
         }
