@@ -15,10 +15,10 @@ public class AutoSearchReadyEventConsumer {
     private final AutoSearchReadyUseCase autoSearchReadyUseCase;
 
     @KafkaListener(
-            topics = "${kafka.events.notification.auto-search-ready-event.topic}",
-            groupId = "${kafka.events.notification.auto-search-ready-event.groupId}",
-            properties = {"auto.offset.reset: ${kafka.events.notification.auto-search-ready-event.properties.auto-offset-reset}"},
-            containerFactory = "${kafka.events.notification.auto-search-ready-event.container-factory}"
+            topics = "${kafka.events.auto-search.ready-event.topic}",
+            groupId = "${kafka.events.auto-search.ready-event.groupId}",
+            properties = {"auto.offset.reset: ${kafka.events.auto-search.ready-event.properties.auto-offset-reset}"},
+            containerFactory = "${kafka.events.auto-search.ready-event.container-factory}"
     )
     public void listenAutoSearchReadyEvent(AutoSearchReadyEvent event) {
         log.info("Received event for auto search ready: {}", event);
