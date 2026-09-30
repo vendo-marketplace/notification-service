@@ -4,7 +4,7 @@ import com.vendo.event_lib.code.CodeEmailEvent;
 
 public class EmailCodeEventDataBuilder {
 
-    public static CodeEmailEvent.Builder withRequiredFields() {
+    public static CodeEmailEvent.CodeEmailEventBuilder withRequiredFields() {
         return CodeEmailEvent.builder()
                 .email("test@gmail.com")
                 .code("123456");

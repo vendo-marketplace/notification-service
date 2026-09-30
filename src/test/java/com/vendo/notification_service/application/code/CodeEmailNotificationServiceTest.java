@@ -1,6 +1,5 @@
 package com.vendo.notification_service.application.code;
 
-import com.vendo.event_lib.auto_search.AutoSearchEmailEvent;
 import com.vendo.event_lib.code.CodeEmailEvent;
 import com.vendo.event_lib.code.CodeEventType;
 import com.vendo.notification_service.domain.code.dto.EmailCodeEventDataBuilder;
@@ -15,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 

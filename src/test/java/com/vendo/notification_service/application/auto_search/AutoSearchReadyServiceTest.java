@@ -1,8 +1,8 @@
 package com.vendo.notification_service.application.auto_search;
 
-import com.vendo.event_lib.auto_search.AutoSearchEmailEvent;
 import com.vendo.event_lib.auto_search.AutoSearchEventType;
-import com.vendo.notification_service.domain.code.dto.AutoSearchEmailEventDataBuilder;
+import com.vendo.event_lib.auto_search.AutoSearchReadyEvent;
+import com.vendo.notification_service.domain.code.dto.AutoSearchReadyEventDataBuilder;
 import com.vendo.notification_service.infrastructure.shared.MailProperties;
 import com.vendo.notification_service.port.mail.MailProviderPort;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AutoSearchEmailNotificationServiceTest {
+public class AutoSearchReadyServiceTest {
 
     @Mock
     private MailProviderPort mailProviderPort;
@@ -33,7 +33,7 @@ public class AutoSearchEmailNotificationServiceTest {
     private MailProperties mailProperties;
 
     @InjectMocks
-    private AutoSearchEmailNotificationService autoSearchEmailNotificationService;
+    private AutoSearchReadyService autoSearchReadyService;
 
     private static final String AUTO_SEARCH_SUBJECT = "Found new products matching your search";
     private static final String AUTO_SEARCH_TEMPLATE = "Hello! We found new products that match your search. Go to: ${client.prod.url}/auto-search/%s/products to view the list.";
@@ -49,13 +49,13 @@ public class AutoSearchEmailNotificationServiceTest {
 
     @Test
     void sendAutoSearchEmailEvent_shouldSendAutoSearchEmailNotification() {
-        AutoSearchEmailEvent event = AutoSearchEmailEventDataBuilder.withAllFields();
+        AutoSearchReadyEvent event = AutoSearchReadyEventDataBuilder.withAllFields();
         ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> contentCaptor = ArgumentCaptor.forClass(String.class);
 
         initAutoSearchTemplate();
 
-        autoSearchEmailNotificationService.send(event);
+        autoSearchReadyService.send(event);
 
         verify(mailProviderPort).sendMail(
                 subjectCaptor.capture(),
@@ -73,11 +73,11 @@ public class AutoSearchEmailNotificationServiceTest {
     @ParameterizedTest
     @MethodSource("invalidEvents")
     void sendAutoSearchEmailEvent_shouldNotSendNotification_whenEventIsInvalid(
-            AutoSearchEmailEvent event
+            AutoSearchReadyEvent event
     ) {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> autoSearchEmailNotificationService.send(event)
+                () -> autoSearchReadyService.send(event)
         );
 
         assertEquals("Invalid auto search event.", exception.getMessage());
@@ -85,10 +85,10 @@ public class AutoSearchEmailNotificationServiceTest {
         verifyNoInteractions(mailProviderPort);
     }
 
-    private static Stream<AutoSearchEmailEvent> invalidEvents() {
+    private static Stream<AutoSearchReadyEvent> invalidEvents() {
         return Stream.of(
                 null,
-                new AutoSearchEmailEvent("eventId", null)
+                new AutoSearchReadyEvent("eventId", null)
         );
     }
 }
