@@ -16,7 +16,7 @@ public class CodeEmailEventConsumer {
 
     @KafkaListener(
             topics = "${kafka.events.notification.code-email-event.topic}",
-            groupId = "${kafka.events.notification.code-email-event.groupId}",
+            groupId = "codeEmailEventGroupId",
             properties = {"auto.offset.reset: ${kafka.events.notification.code-email-event.properties.auto-offset-reset}"},
             containerFactory = "${kafka.events.notification.code-email-event.container-factory}"
     )
