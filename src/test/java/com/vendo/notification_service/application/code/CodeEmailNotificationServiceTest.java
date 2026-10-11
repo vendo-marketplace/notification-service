@@ -2,7 +2,7 @@ package com.vendo.notification_service.application.code;
 
 import com.vendo.event_lib.code.CodeEmailEvent;
 import com.vendo.event_lib.code.CodeEventType;
-import com.vendo.notification_service.domain.code.dto.EmailCodeEventDataBuilder;
+import com.vendo.notification_service.domain.code.dto.CodeEmailEventDataBuilder;
 import com.vendo.notification_service.infrastructure.shared.MailProperties;
 import com.vendo.notification_service.port.mail.MailProviderPort;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class CodeEmailNotificationServiceTest {
 
     @Test
     void sendCodeEmailEvent_shouldSendEmailNotification_whenEmailVerificationEvent() {
-        CodeEmailEvent event = EmailCodeEventDataBuilder.withRequiredFields()
+        CodeEmailEvent event = CodeEmailEventDataBuilder.withRequiredFields()
                 .type(CodeEventType.EMAIL_VERIFICATION)
                 .build();
         ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
@@ -75,7 +75,7 @@ public class CodeEmailNotificationServiceTest {
 
     @Test
     void sendCodeEmailEvent_shouldSendEmailNotification_whenPasswordRecoveryEvent() {
-        CodeEmailEvent event = EmailCodeEventDataBuilder.withRequiredFields()
+        CodeEmailEvent event = CodeEmailEventDataBuilder.withRequiredFields()
                 .type(CodeEventType.PASSWORD_RECOVERY)
                 .build();
         ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
