@@ -1,7 +1,9 @@
 package com.vendo.notification_service.adapter.auto_search.in.kafka;
 
+import com.vendo.event_lib.auto_search.AutoSearchEventType;
 import com.vendo.event_lib.auto_search.AutoSearchReadyEvent;
-import com.vendo.notification_service.port.AutoSearchReadyUseCase;
+import com.vendo.notification_service.adapter.auto_search.in.mapper.AutoSearchEventMapper;
+import com.vendo.notification_service.port.AutoSearchEventUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AutoSearchReadyEventConsumer {
 
-    private final AutoSearchReadyUseCase autoSearchReadyUseCase;
+    private final AutoSearchEventMapper mapper;
+    private final AutoSearchEventUseCase autoSearchEventUseCase;
 
     @KafkaListener(
             topics = "${kafka.events.auto-search.ready-event.topic}",
@@ -22,7 +25,7 @@ public class AutoSearchReadyEventConsumer {
     )
     public void listenAutoSearchReadyEvent(AutoSearchReadyEvent event) {
         log.info("Received event for auto search ready: {}", event);
-        autoSearchReadyUseCase.send(event);
+        autoSearchEventUseCase.send(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, mapper.toAutoSearch(event));
     }
 
 }

@@ -1,8 +1,7 @@
 package com.vendo.notification_service.application.auto_search;
 
 import com.vendo.event_lib.auto_search.AutoSearchEventType;
-import com.vendo.event_lib.auto_search.AutoSearchReadyEvent;
-import com.vendo.notification_service.domain.code.dto.AutoSearchReadyEventDataBuilder;
+import com.vendo.notification_service.domain.auto_search.AutoSearch;
 import com.vendo.notification_service.infrastructure.shared.MailProperties;
 import com.vendo.notification_service.port.mail.MailProviderPort;
 import org.junit.jupiter.api.Test;
@@ -33,14 +32,18 @@ public class AutoSearchReadyServiceTest {
     private MailProperties mailProperties;
 
     @InjectMocks
-    private AutoSearchReadyService autoSearchReadyService;
+    private AutoSearchEventService autoSearchReadyService;
 
     private static final String AUTO_SEARCH_SUBJECT = "Found new products matching your search";
     private static final String AUTO_SEARCH_TEMPLATE = "Hello! We found new products that match your search. Go to: ${client.prod.url}/auto-search/%s/products to view the list.";
+    private static final String NEW_PRODUCT_SUBJECT = "New product matched your search";
+    private static final String NEW_PRODUCT_TEMPLATE = "A new product matched search %s";
 
     private final MailProperties.AutoSearchTemplate autoSearchTemplate = new MailProperties.AutoSearchTemplate(
-            Map.of(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, AUTO_SEARCH_SUBJECT),
-            Map.of(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, AUTO_SEARCH_TEMPLATE)
+            Map.of(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, AUTO_SEARCH_SUBJECT,
+                    AutoSearchEventType.AUTO_SEARCH_NEW_PRODUCT, NEW_PRODUCT_SUBJECT),
+            Map.of(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, AUTO_SEARCH_TEMPLATE,
+                    AutoSearchEventType.AUTO_SEARCH_NEW_PRODUCT, NEW_PRODUCT_TEMPLATE)
     );
 
     private void initAutoSearchTemplate() {
@@ -49,17 +52,17 @@ public class AutoSearchReadyServiceTest {
 
     @Test
     void sendAutoSearchEmailEvent_shouldSendAutoSearchEmailNotification() {
-        AutoSearchReadyEvent event = AutoSearchReadyEventDataBuilder.withAllFields();
+        AutoSearch autoSearch = new AutoSearch("search-123", "user@example.com");
         ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> contentCaptor = ArgumentCaptor.forClass(String.class);
 
         initAutoSearchTemplate();
 
-        autoSearchReadyService.send(event);
+        autoSearchReadyService.send(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, autoSearch);
 
         verify(mailProviderPort).sendMail(
                 subjectCaptor.capture(),
-                eq(event.email()),
+                eq(autoSearch.email()),
                 contentCaptor.capture()
         );
 
@@ -67,17 +70,27 @@ public class AutoSearchReadyServiceTest {
         String content = contentCaptor.getValue();
 
         assertThat(subject).isEqualTo(AUTO_SEARCH_SUBJECT);
-        assertThat(content.contains(event.id())).isTrue();
+        assertThat(content).contains(autoSearch.id());
+    }
+
+    @Test
+    void sendAutoSearchEmailEvent_shouldUseNewProductTemplate() {
+        AutoSearch autoSearch = new AutoSearch("search-456", "user@example.com");
+        initAutoSearchTemplate();
+
+        autoSearchReadyService.send(AutoSearchEventType.AUTO_SEARCH_NEW_PRODUCT, autoSearch);
+
+        verify(mailProviderPort).sendMail(NEW_PRODUCT_SUBJECT, autoSearch.email(), NEW_PRODUCT_TEMPLATE.formatted(autoSearch.id()));
     }
 
     @ParameterizedTest
     @MethodSource("invalidEvents")
     void sendAutoSearchEmailEvent_shouldNotSendNotification_whenEventIsInvalid(
-            AutoSearchReadyEvent event
+            AutoSearch autoSearch
     ) {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> autoSearchReadyService.send(event)
+                () -> autoSearchReadyService.send(AutoSearchEventType.AUTO_SEARCH_REQUEST_FOUND, autoSearch)
         );
 
         assertEquals("Invalid auto search event.", exception.getMessage());
@@ -85,10 +98,13 @@ public class AutoSearchReadyServiceTest {
         verifyNoInteractions(mailProviderPort);
     }
 
-    private static Stream<AutoSearchReadyEvent> invalidEvents() {
+    private static Stream<AutoSearch> invalidEvents() {
         return Stream.of(
                 null,
-                new AutoSearchReadyEvent("eventId", null)
+                new AutoSearch("search-123", null),
+                new AutoSearch(null, "user@example.com"),
+                new AutoSearch("", "user@example.com"),
+                new AutoSearch("search-123", "")
         );
     }
 }

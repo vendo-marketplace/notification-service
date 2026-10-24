@@ -13,7 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BrevoMailAdapterTest {
@@ -46,5 +47,16 @@ public class BrevoMailAdapterTest {
         assertEquals(text, capturedEmail.getTextContent());
         assertEquals(to, capturedEmail.getTo().get(0).getEmail());
         assertEquals(sendSmtpEmailSender, capturedEmail.getSender());
+        assertEquals(1, capturedEmail.getTo().size());
+    }
+
+    @Test
+    void sendMail_shouldLogBrevoApiFailureWithoutPropagatingIt() throws ApiException {
+        doThrow(new ApiException("Brevo unavailable"))
+                .when(transactionalEmailsApi).sendTransacEmail(any(SendSmtpEmail.class));
+
+        assertDoesNotThrow(() -> brevoMailAdapter.sendMail("subject", "to@example.com", "body"));
+
+        verify(transactionalEmailsApi).sendTransacEmail(any(SendSmtpEmail.class));
     }
 }

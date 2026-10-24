@@ -116,7 +116,9 @@ public class CodeEmailNotificationServiceTest {
                 null,
                 new CodeEmailEvent("code", null, CodeEventType.EMAIL_VERIFICATION),
                 new CodeEmailEvent(null, "email", CodeEventType.EMAIL_VERIFICATION),
-                new CodeEmailEvent("code", "email", null)
+                new CodeEmailEvent("code", "email", null),
+                new CodeEmailEvent("", "email", CodeEventType.EMAIL_VERIFICATION),
+                new CodeEmailEvent("code", "", CodeEventType.EMAIL_VERIFICATION)
         );
     }
 }
